@@ -21,29 +21,21 @@ parser.add_argument(
 args = parser.parse_args()
 print(args)
 
-# TRAIN_DATA_PATH = pathlib.Path("./data/training/dataset_exp4")
-# TRAIN_DATA_PATH = pathlib.Path("./double_descent_data")
 TRAIN_DATA_PATH = pathlib.Path("./data/testing/real_world_data")
 training_set = dataloader.TrainingLogDataset(TRAIN_DATA_PATH)
 training_set.loadDataset()
 
-# OUT_PATH = pathlib.Path("./out/cmp_early_stop")
-# OUT_PATH = pathlib.Path("./out/dd_cmp_early_stop")
 OUT_PATH = pathlib.Path("./out/test_cmp_early_stop_step10")
 OUT_PATH.mkdir(exist_ok=True)
 print(training_set)
 
-models_path = pathlib.Path("./out")
+models_path = pathlib.Path("./models")
 for cls_name in ["tsf", "tsbf", "bossvs", "hmmgmm", "saxvsm", "knndtw"]:
     print("="*9, cls_name, "="*9)
-    # models = models_path.glob("*.plk")
     model_path = list(models_path.glob(f"{cls_name}_*.pkl"))[0]
     model = helper.readPkl(model_path)
-    # model
-    # model_path
 
     classifier_window = args.window_size
-    # step = classifier_window // 10
     step = args.step_size
 
     def addInfo(classifier_stop_res):
@@ -55,16 +47,12 @@ for cls_name in ["tsf", "tsbf", "bossvs", "hmmgmm", "saxvsm", "knndtw"]:
         return classifier_stop_res
 
     classifier_stop_res = {
-        # "label": training_set.labels,
-        # "name": training_set.names,
         "is_stopped": [],
         "stop_epoch": [],
         "best_epoch": [],
         "best_loss": [],
         "total_time": [],
         "timer_count": [],
-        # "window_size": [classifier_window] * len(training_set.names),
-        # "step": [step] * len(training_set.names),
     }
     for idx, name in enumerate(training_set.names):
         idx = training_set.names.index(name)
@@ -85,8 +73,6 @@ for cls_name in ["tsf", "tsbf", "bossvs", "hmmgmm", "saxvsm", "knndtw"]:
                 best_loss = cur_data["monitor_metric"][best_epoch]
                 classifier_stop_res["is_stopped"].append(1)
                 classifier_stop_res["stop_epoch"].append(end_epoch - 1)
-                # classifier_stop_res["best_epoch"].append(best_epoch)
-                # classifier_stop_res["best_loss"].append(best_loss)
                 break
         else:
             best_epoch = np.argmin(cur_data["monitor_metric"])

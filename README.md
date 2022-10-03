@@ -1,7 +1,13 @@
 # Replication Package of "Using the Training History to Detect and Prevent Overfitting in Deep Learning Models"
 
-This repository provides all the data, code, and train models required to replicate our paper.
+This repository provides all the data, code, notebook, and the trained models required to replicate our paper: 
 
+- The datasets can be found under the [./data](./data) folder, where:
+  - the [training](./data/training) folder contains the simulated dataset 
+  - the [testing](./data/testing) folder contains the real-world dataset
+- Using [./train.py](./train.py) for training and [./predict.py](./predict.py) for prediction
+- Using the notebook [./reproduce.ipynb](./reproduce.ipynb) to generate the figures of our paper
+- The trained models can be found under the [models](./models) folder
 
 ## Setup environment
 
@@ -89,6 +95,8 @@ The trained models are saved under the `./out` folder for later use.
 
 ## Using the Trained Detection Methods
 
+### Overfitting detection
+
 Preparing the training logs (one or more) that requires overfitting detection
 and run the following code:
 
@@ -99,3 +107,9 @@ python predict.py ./out/spearman_{DATE}.pkl ./data/testing/real_world_data/ ./ou
 python predict.py ./out/knndtw_{DATE}.pkl ./data/testing/real_world_data/ ./out
 python predict.py ./out/tsf_{DATE}.pkl ./data/testing/real_world_data/ ./out
 ```
+
+### Overfitting prevention
+
+The trained model can be used for overfitting prevention:
+- based on the rolling window: [./classifier_as_stopper.py](./classifier_as_stopper.py) 
+- based on the whole history: [./classifier_as_stopper_whole_his.py](./classifier_as_stopper_whole_his.py)
